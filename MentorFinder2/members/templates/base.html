@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.min.css" rel="stylesheet">
+</head>
+<body class="well">
+    <div class="container">
+        <!-- Login/Join/Logout row -->
+        <div class="row">
+            {% if user.is_authenticated %}
+            <div style="float: right">
+                <ul class="nav nav-pills inline">
+                    <li><a href="#">Logged in as: "{{ user.username }}"</a></li>
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                    <li><a href="#">Profile</a></li>
+                    {% if user.is_superuser %}
+                    <li><a href="{% url 'admin:index' %}">Admin</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+            {% else %}
+            <div style="float: right">
+                <ul class="nav nav-pills">
+                    <li><a href="{% url 'join' %}">Join</a></li>
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+        <div>
+        {% block body %}{% endblock %}
+        </div>
+    </div>
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="js/bootstrap.js"></script>
+</body>
+</html>

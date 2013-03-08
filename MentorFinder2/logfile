@@ -1,0 +1,46 @@
+LOG:  database system was shut down at 2013-03-06 13:44:52 PST
+LOG:  database system is ready to accept connections
+LOG:  autovacuum launcher started
+ERROR:  unrecognized configuration parameter "tables"
+STATEMENT:  show tables;
+	
+ERROR:  cannot drop table auth_group because other objects depend on it
+DETAIL:  constraint group_id_refs_id_f4b32aac on table auth_group_permissions depends on table auth_group
+	constraint auth_user_groups_group_id_fkey on table auth_user_groups depends on table auth_group
+HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+STATEMENT:  DROP TABLE public.auth_group
+ERROR:  database "mentorfinder_db" is being accessed by other users
+DETAIL:  There is 1 other session using the database.
+STATEMENT:  DROP DATABASE mentorfinder_db;
+ERROR:  null value in column "date_modified" violates not-null constraint
+DETAIL:  Failing row contains (1, pbkdf2_sha256$10000$a02CNvCjbU2x$dq/aTcafZLFiNoyP/TFXQiH0p+AYgfq..., 2013-03-06 23:07:15.338224+00, f, cqoverly, , , cqoverly@gmail.com, f, t, 2013-03-06 23:07:15.338224+00, null, , f, f).
+STATEMENT:  INSERT INTO "members_mfuser" ("password", "last_login", "is_superuser", "username", "first_name", "last_name", "email", "is_staff", "is_active", "date_joined", "date_modified", "intro", "is_mentor", "is_mentoree") VALUES ('pbkdf2_sha256$10000$a02CNvCjbU2x$dq/aTcafZLFiNoyP/TFXQiH0p+AYgfqrZjs5qPM26uQ=', '2013-03-06 23:07:15.338224+00:00', false, 'cqoverly', '', '', 'cqoverly@gmail.com', false, true, '2013-03-06 23:07:15.338224+00:00', NULL, '', false, false) RETURNING "members_mfuser"."id"
+ERROR:  null value in column "date_modified" violates not-null constraint
+DETAIL:  Failing row contains (2, pbkdf2_sha256$10000$pwIh6zchtOFN$9sNJhmBqkJYajpfD76CoA+EjHCB+p46..., 2013-03-06 23:27:12.543359+00, f, cqoverly, , , cqoverly@gmail.com, f, t, 2013-03-06 23:27:12.543359+00, null, , f, f).
+STATEMENT:  INSERT INTO "members_mfuser" ("password", "last_login", "is_superuser", "username", "first_name", "last_name", "email", "is_staff", "is_active", "date_joined", "date_modified", "intro", "is_mentor", "is_mentoree") VALUES ('pbkdf2_sha256$10000$pwIh6zchtOFN$9sNJhmBqkJYajpfD76CoA+EjHCB+p46RMWznuDlvPzQ=', '2013-03-06 23:27:12.543359+00:00', false, 'cqoverly', '', '', 'cqoverly@gmail.com', false, true, '2013-03-06 23:27:12.543359+00:00', NULL, '', false, false) RETURNING "members_mfuser"."id"
+FATAL:  database "mentorfinder_db" does not exist
+ERROR:  permission denied to create database
+STATEMENT:  CREATE DATABASE "test_mentorfinder_db" 
+ERROR:  database "test_mentorfinder_db" does not exist
+STATEMENT:  DROP DATABASE "test_mentorfinder_db"
+FATAL:  lock file "postmaster.pid" already exists
+HINT:  Is another postmaster (PID 27706) running in data directory "/usr/local/var/postgres"?
+ERROR:  permission denied to create database
+STATEMENT:  CREATE DATABASE "test_mentorfinder_db" 
+ERROR:  database "test_mentorfinder_db" does not exist
+STATEMENT:  DROP DATABASE "test_mentorfinder_db"
+ERROR:  permission denied to create database
+STATEMENT:  CREATE DATABASE "test_mentorfinder_db" 
+ERROR:  database "test_mentorfinder_db" does not exist
+STATEMENT:  DROP DATABASE "test_mentorfinder_db"
+FATAL:  database "cqoverly" does not exist
+ERROR:  database "test_mentorfinder_db" already exists
+STATEMENT:  CREATE DATABASE "test_mentorfinder_db" 
+ERROR:  database "test_mentorfinder_db" already exists
+STATEMENT:  CREATE DATABASE "test_mentorfinder_db" 
+ERROR:  database "test_mentorfinder_db" already exists
+STATEMENT:  CREATE DATABASE "test_mentorfinder_db" 
+LOG:  autovacuum launcher shutting down
+LOG:  received smart shutdown request
+LOG:  shutting down
+LOG:  database system is shut down
