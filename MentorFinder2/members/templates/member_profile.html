@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}{% endblock %}
+{% block body %}
+<h2>{{ member }}</h2>
+<ul>
+    <li>Username: {{ member.username }}</li>
+    <li>Member since: {{ member.date_joined }}</li>
+    <br>
+    <li>Fields of Interest:</li>
+        <ul>
+            {% for field in Fields %}
+            <li>{{ field }}</li>
+            {% endfor %}
+        </ul>
+        <br>
+    <li>Education:</li>
+        <ul>
+            {% for e in education %}
+            <li>{{ e.ed_type }}</li>
+            {% endfor %}
+        </ul>
+        <br>
+    <li>You have been endorsed by:</li>
+        <ul>
+            {% for person in endorsed_by %}
+            <li>
+                {{ person }}
+                <a href="#" style="padding-left: 2em">
+                    Send {{ person.first_name }} a message.
+                </a></li>
+            {% endfor %}
+        </ul>
+    <li>You have endorsed:</li>
+        <ul>
+            {% for person in endorsed %}
+            <li>
+                {{ person }}
+                <a href="#" style="padding-left: 2em">
+                    Send {{ person.first_name }} a message.
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+        <br>
+</ul>
+
+{% endblock %}

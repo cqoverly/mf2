@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}{% endblock %}
+{% block body %}
+<h2>field_list.html</h2>
+<ul>
+{% for f in fields %}
+    <li><a href="#">{{ f }}</a> -- {{ f.category }}</li>
+{% endfor %}
+</ul>
+{% endblock %}

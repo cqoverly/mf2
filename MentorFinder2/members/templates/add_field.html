@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Member Add Field{% endblock %}
+{% block body %}
+<div>
+    <form class="well">
+        <label>Select a field to add:</label>
+        {{ form.field }}
+        <button>Add</button> <button>Cancel</button>
+    </form>
+</div>
+<p class="text-error">{{ message }}</p>
+{% endblock %}

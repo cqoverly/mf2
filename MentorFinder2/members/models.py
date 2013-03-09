@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from fields.models import Field
 
 
 
@@ -34,15 +35,36 @@ class MFUser(AbstractUser):
             self.is_active = False
 
     def endorsed_by(self):
-        pass
+        endorsements = Endorsement.objects.filter(endorsee=self.id)
+        member_endorsers = [e.endorser for e in endorsements]
+        return member_endorsers
 
-    def endorsed(self):
-        pass
+    def has_endorsed(self):
+        endorsements = Endorsement.objects.filter(endorser=self.id)
+        members_endorsed = [e.endorsee for e in endorsements]
+        return members_endorsed
 
+    def get_education(self):
+        education = Education.objects.filter(member=self.id)
+        return education
+
+    def create_profile(self):
+        member_endorsers = self.endorsed_by()
+        members_endorsed = self.has_endorsed()
+        education = self.get_education()
+        return {'member': self,
+                'member_endorsers': member_endorsers,
+                'members_endorsed': members_endorsed,
+                'education': education,
+                }
 
 class Education(models.Model):
+    choices = (('HS', 'High School'),
+               ('UG', 'Undergraduate'),
+               ('PG', 'Post-Graduate'),
+               )
     member = models.ForeignKey(MFUser)
-    ed_type = models.CharField('Level', max_length=20)
+    ed_type = models.CharField('Level', max_length=20, choices=choices)
     year_completed = models.DateTimeField('Completed')
     focus1 = models.CharField(max_length=32, default='')
     focus2 = models.CharField(max_length=32, default='')
@@ -69,7 +91,7 @@ class JobExperience(models.Model):
 class Endorsement(models.Model):
     endorsee = models.ForeignKey(MFUser,
                                  db_column='member',
-                                 related_name='was_endoresed'
+                                 related_name='was_endorsed'
                                  )
     endorser = models.ForeignKey(MFUser,
                                  db_column='endorsed_by',
@@ -85,6 +107,22 @@ class Endorsement(models.Model):
         ordering = ['-date_made', 'endorsee']
         verbose_name = 'Endorsement'
         verbose_name_plural = 'Endorsements'
+
+    def __unicode__(self):
+            return "{0} is endorsed by {1}".format(self.endorsee, self.endorser)
+
+
+class MemberField(models.Model):
+    field = models.ForeignKey(Field)
+    member = models.ForeignKey(MFUser)
+    can_mentor = models.BooleanField(default=False)
+    date_entered = models.DateField()
+
+    class Meta:
+        ordering = ['-date_entered']
+
+
+
 
 
 

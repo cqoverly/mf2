@@ -3,6 +3,8 @@
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+AUTH_USER_MODEL = 'members.MFUser'
+
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
@@ -61,7 +63,7 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = ''
+STATIC_ROOT = '/Users/cqoverly/mf2/MentorFinder2/'
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
@@ -125,7 +127,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'members',
-    'messages',
+    'fields',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -157,7 +159,7 @@ LOGGING = {
     }
 }
 
-AUTH_USER_MODEL = 'members.MFUser'
+
 LOGIN_URL = 'login/'
 LOGIN_REDIRECT_URL = '/'
 

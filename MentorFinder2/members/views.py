@@ -4,37 +4,18 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
 
-from .models import MFUser
-from .forms import JoinForm
+from .models import MFUser, Education, Endorsement
+from .forms import JoinForm #AddFieldForm
 
 
 def home(request):
-    message = ''
-
+    message = request.session.get('message')
+    text_class = request.session.get('text_class')
+    if not message:
+        message = ''
     test_message = 'This is the home page.'
     test_message_class = 'text-info'
-    return render(request,
-                  'home.html',
-                  {'mesage': test_message,
-                   'class': test_message_class},
-                  )
-
-
-def login(request):
-    message = ''
-    username = request.POST['username']
-    password = request.POST['password']
-    user = authenticate(username=username, password=password)
-    if user is not None:
-        if user.is_active:
-            login(request, user)
-            message = 'Welcome back {}'.format(user)
-            return redirect('home', {'message': message})
-        else:
-            message = 'Account is no longer valid.'
-            # Return a 'disabled account' error message
-    else:
-        message = 'Invalid login'
+    return render(request, 'home.html', {'message': message, 'class': text_class})
 
 
 def join(request):
@@ -56,11 +37,11 @@ def join(request):
             member.first_name = first_name
             member.last_name = last_name
             member.save()
-            message = 'Thank you for joining.'
-        return redirect('home',
-                        {'message': message,
-                         'class': 'text-info'})
-
+            user = authenticate(username=username, password=password)
+            login(request, user)
+            request.session['message'] = 'Welcome, {0}!'.format(member)
+            request.session['text_class'] = 'text-info'
+        return redirect('home')
     else:
         form = JoinForm()
 
@@ -70,5 +51,32 @@ def join(request):
                    'message': message}
                   )
 
-LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/'
+@login_required
+def member_profile(request, pk):
+
+    member_user = MFUser.objects.get(pk=pk)
+    profile = member_user.create_profile()
+    return render(request,
+                  'member_profile.html',
+                  {'member': member_user,
+                   'endorsed_by': profile.get('member_endorsers'),
+                   'endorsed': profile.get('members_endorsed'),
+                   'education': profile.get('education'),
+                   }
+                  )
+
+# @login_required
+# def add_field(request):
+#     member = request.user
+#     if request.method == 'POST':
+#         form = AddFieldForm(request.POST)
+#     if form.is_valid():
+#         field_name = form.cleaned_data['name']
+#         # process the data
+#     members_fields = MemberField.objects.filter(member=member)
+#     form = AddFieldForm()
+#     form.queryset = Field.objects.exclude()
+
+
+
+
