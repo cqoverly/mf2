@@ -2,10 +2,13 @@
 {% block title %}Member Add Field{% endblock %}
 {% block body %}
 <div>
-    <form class="well">
-        <label>Select a field to add:</label>
-        {{ form.field }}
-        <button>Add</button> <button>Cancel</button>
+    <form class="well" method="POST" action="">
+        <label>Select a field to add:</label>{% csrf_token %}
+        {{ form.name }}<br>
+        <label>Check if you can mentor this field?</label>
+        {{ form.mentor }}<br>
+        <button class="btn active" name="add">Add</button>
+        <button class="btn" name="cancel">Cancel</button><br>
     </form>
 </div>
 <p class="text-error">{{ message }}</p>

@@ -1,11 +1,14 @@
+from datetime import datetime
+
 from django.views.generic import ListView, DetailView
 from django.forms import ModelForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
 
-from .models import MFUser, Education, Endorsement
-from .forms import JoinForm #AddFieldForm
+from .models import MFUser, Education, Endorsement, MemberField
+from .forms import JoinForm, AddFieldForm
+from fields.models import Field
 
 
 def home(request):
@@ -41,7 +44,7 @@ def join(request):
             login(request, user)
             request.session['message'] = 'Welcome, {0}!'.format(member)
             request.session['text_class'] = 'text-info'
-        return redirect('home')
+        return redirect('member_profile', pk=member.id)
     else:
         form = JoinForm()
 
@@ -50,6 +53,7 @@ def join(request):
                   {'form': form,
                    'message': message}
                   )
+
 
 @login_required
 def member_profile(request, pk):
@@ -65,17 +69,33 @@ def member_profile(request, pk):
                    }
                   )
 
-# @login_required
-# def add_field(request):
-#     member = request.user
-#     if request.method == 'POST':
-#         form = AddFieldForm(request.POST)
-#     if form.is_valid():
-#         field_name = form.cleaned_data['name']
-#         # process the data
-#     members_fields = MemberField.objects.filter(member=member)
-#     form = AddFieldForm()
-#     form.queryset = Field.objects.exclude()
+
+@login_required
+def add_field(request):
+    message = ''
+    member = request.user
+    field_name = ''
+    mentor = ''
+    if request.method == 'POST':
+        form = AddFieldForm(request.POST, user=request.user)
+        if request.POST.get('cancel') == '':
+            pk = member.id
+            return redirect('member_profile', pk=pk)
+        elif request.POST.get('add') == '':
+            if form.is_valid():
+                field_name = form.cleaned_data['name']
+                mentor = form.cleaned_data['mentor']
+                new_field = MemberField(field=field_name,
+                                        member=member,
+                                        can_mentor=mentor,
+                                        date_entered=datetime.now().date())
+                new_field.save()
+                message = "{0} has been added to you profile.".format(mentor)
+            else:
+                message = "Invalid form."
+    form = AddFieldForm(user=request.user)
+    return render(request, 'add_field.html', {'message': message,
+                                              'form': form})
 
 
 
