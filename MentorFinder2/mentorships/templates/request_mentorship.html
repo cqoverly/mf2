@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}{% endblock %}
+{% block body %}
+<h3>Request Mentorship from {{ mentor }}:</h3>
+<div class="span12">
+    <form action="" method="POST" class="span9">{% csrf_token %}
+        <label>Message:</label>
+        {{ form }}<br>
+        <button class="btn active"name="send">Send</button>
+        <button class="btn" name="cancel">Cancel</button>
+    </form>
+</div>
+{% endblock %}

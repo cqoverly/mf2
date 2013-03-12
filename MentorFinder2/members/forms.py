@@ -40,6 +40,6 @@ class AddFieldForm(forms.Form):
             raise forms.ValidationError('Mentorship field not answered.')
         return self.cleaned_data
 
-
-
-
+class IntroForm(forms.Form):
+    widget = forms.widgets.Textarea(attrs={'class': 'span6'})
+    intro_entry = forms.CharField(max_length=6000, widget=widget)

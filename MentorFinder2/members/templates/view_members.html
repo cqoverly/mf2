@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}View Members{% endblock %}
+{% block body %}
+<ul>
+{% for m in member %}
+<li>
+    <a href="{% url 'member_detail' m.pk %}">{{ m }}</a>
+</li>
+    <ul>
+        {% for interest in m.get_interests %}
+        <li>{{ interest }}</li>
+        {% endfor %}
+    </ul>
+{% endfor %}
+</ul>
+{% endblock %}

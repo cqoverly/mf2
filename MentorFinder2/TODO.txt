@@ -1,0 +1,33 @@
+TODO.txt
+
+
+1:  Create edit_profile
+        Form
+        HTML
+        View
+
+2:  <COMPLETE>Request Mentorship<COMPLETE>
+        Form
+        Model
+        HTML
+        View
+
+3:  Create method Mentorship.register()
+        Moves a mentorship request to an actual Mentorship instance.
+        Sets MentorshipRequest.accepted to True
+        Accepted from requested mentors own profile view.
+
+4:  Switch all notification messages to use Django's included messages system
+
+5:  <COMPLETE>Create mf_message form<COMPLETE>
+
+6:  Move templates into projects folder.
+
+7:  <COMPLETE>Delete field interest on member_profile.html<COMPLETE>
+
+8:  Create a filter mechanism for view_members.
+
+9:  Add message notification to profile page
+        (And to control bar?)
+
+10  Need a way to accept mentorship requests

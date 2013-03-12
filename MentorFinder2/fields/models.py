@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class FieldCategory(models.Model):
     name = models.CharField(max_length=20)
     description = models.TextField(max_length=600)
@@ -10,6 +11,7 @@ class FieldCategory(models.Model):
     def __unicode__(self):
         return self.name
 
+
 class Field(models.Model):
     name = models.CharField(max_length=20)
     category = models.ForeignKey(FieldCategory)
@@ -18,6 +20,9 @@ class Field(models.Model):
     class Meta:
         ordering = ['category', 'name']
 
+    def __unicode__(self):
+        return "{0}: {1}".format(self.name, self.category)
+
     def search(self, category=None):
         if category:
             queryset = self.objects.filter(category=category)
@@ -25,5 +30,3 @@ class Field(models.Model):
         else:
             return self.objects.all()
 
-    def __unicode__(self):
-        return "{0}: {1}".format(self.name, self.category)

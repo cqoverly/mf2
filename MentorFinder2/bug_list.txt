@@ -1,0 +1,9 @@
+Issue #1: When new add_field is save with mentor=False, still checked as
+          active in admin view of MemberField.
+
+Issue #2: MFUser.check_status() has incompatible datetimes to subtract causing
+          error.
+
+<FIXED>Issue #3:  Logged_in decorator not working.
+
+<FIXED>Issue #4: Bio textarea won't go wider in member_profile

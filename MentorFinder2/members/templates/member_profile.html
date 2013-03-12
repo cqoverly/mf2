@@ -2,46 +2,73 @@
 {% block title %}{% endblock %}
 {% block body %}
 <h2>{{ member }}</h2>
-<ul>
-    <li>Username: {{ member.username }}</li>
-    <li>Member since: {{ member.date_joined }}</li>
-    <br>
-    <li>Fields of Interest:</li>
+{% if status %}
+<p class="text-success">Is active: {{ status }}</p>
+{% else %}
+<p class="text-error">Is active: {{ status }}</p>
+{% endif %}
+<div class="span12">
+    <div class="span6">
         <ul>
-            {% for field in Fields %}
-            <li>{{ field }}</li>
-            {% endfor %}
-        </ul>
-        <br>
-    <li>Education:</li>
-        <ul>
-            {% for e in education %}
-            <li>{{ e.ed_type }}</li>
-            {% endfor %}
-        </ul>
-        <br>
-    <li>You have been endorsed by:</li>
-        <ul>
-            {% for person in endorsed_by %}
+            <li>Username: {{ member.username }}</li>
+            <li>Email: {{ member.email }}</li>
+            <li>Member since: {{ member.date_joined }}</li>
+            <br>
             <li>
-                {{ person }}
-                <a href="#" style="padding-left: 2em">
-                    Send {{ person.first_name }} a message.
-                </a></li>
-            {% endfor %}
-        </ul>
-    <li>You have endorsed:</li>
-        <ul>
-            {% for person in endorsed %}
-            <li>
-                {{ person }}
-                <a href="#" style="padding-left: 2em">
-                    Send {{ person.first_name }} a message.
+                Fields of Interest:
+                <a href="{% url 'add_field' %}" style="padding-left: 2em">
+                    Add New Field
                 </a>
             </li>
-            {% endfor %}
+                <ul>
+                    {% for field in interests %}
+                    <li>{{ field }}
+                        <a href="{% url 'delete_field' field.id %}" style="padding-left: 2em">
+                            Delete
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                <br>
+            <li>Education:</li>
+                <ul>
+                    {% for e in education %}
+                    <li>{{ e.ed_type }}</li>
+                    {% endfor %}
+                </ul>
+                <br>
+            <li>You have been endorsed by:</li>
+                <ul>
+                    {% for person in endorsed_by %}
+                    <li>
+                        <a href="{% url 'member_detail' person.id %}">
+                            {{ person }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            <li>You have endorsed:</li>
+                <ul>
+                    {% for person in endorsed %}
+                    <li>
+                        <a href="{% url 'member_detail' person.id %}">
+                            {{ person }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                <br>
         </ul>
-        <br>
-</ul>
+    </div>
+</div>
+<br>
 
+<div class="span6">
+    <form action="" method="POST">{% csrf_token %}
+        <label><strong>Intro</strong></label>
+        <p>{{ intro_form.intro_entry }}</p>
+        <button class="btn btn-primary" name="save">Save</button>
+        <!-- <button class="btn" name="revert">Revert</button> -->
+    </form>
+</div>
 {% endblock %}

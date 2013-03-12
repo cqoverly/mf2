@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}{% endblock %}
+{% block body %}
+<h2>{{ member }}</h2>
+{% if status %}
+<p class="text-success">Is active: {{ status }}</p>
+{% else %}
+<p class="text-error">Is active: {{ status }}</p>
+{% endif %}
+{% if member.id != user.id %}
+<a href="{% url 'new_message' member.id %}">Email {{ member }}</a><br>
+<a href="{% url 'request_mentorship' member.id %}">
+    Request a mentorship with {{ member }}
+</a><br><br>
+{% endif %}
+<ul>
+    <li>Username: {{ member.username }}</li>
+    <li>Member since: {{ member.date_joined }}</li>
+    <br>
+    <li>
+        Fields of Interest:
+    </li>
+        <ul>
+            {% for field in interests %}
+            <li>{{ field }}</li>
+            {% endfor %}
+        </ul>
+        <br>
+    <li>Education:</li>
+        <ul>
+            {% for e in education %}
+            <li>{{ e.ed_type }}</li>
+            {% endfor %}
+        </ul>
+        <br>
+    <li>You have been endorsed by:</li>
+        <ul>
+            {% for person in endorsed_by %}
+            <li>
+                <a href="{% url 'member_detail' person.id %}">
+                    {{ person }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    <li>You have endorsed:</li>
+        <ul>
+            {% for person in endorsed %}
+            <li>
+                <a href="{% url 'member_detail' person.id %}">
+                    {{ person }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+        <br>
+
+
+</ul>
+            <p>{{ intro }}</p>
+
+{% endblock %}

@@ -27,4 +27,7 @@ urlpatterns = patterns('',
         {'next_page': '/'},
         name='logout'),
     url(r'^fields/', include('fields.urls')),
+    url(r'^mentorships/', include('mentorships.urls')),
+    url(r'^mf_messages/', include('mf_messages.urls')),
+
 )

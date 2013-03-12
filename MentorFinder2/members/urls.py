@@ -10,5 +10,9 @@ urlpatterns = patterns('',
     url(r'^$', views.home, name='home'),
     url(r'^profile/(?P<pk>\d+)/$', views.member_profile, name='member_profile'),
     url(r'^add_field/$', views.add_field, name='add_field'),
+    url(r'^view_members/$', views.ViewMembers.as_view(), name='view_members'),
+    url(r'^member_detail/(?P<pk>\d+)/$', views.member_detail, name='member_detail'),
+    url(r'^delete_field/(?P<field_pk>\d+)/$', views.delete_field, name='delete_field'),
+
 
 )

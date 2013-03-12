@@ -1,9 +1,9 @@
 from datetime import datetime, timedelta
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
+
 from fields.models import Field
-
-
 
 
 class MFUser(AbstractUser):
@@ -29,7 +29,7 @@ class MFUser(AbstractUser):
         return "{0}".format(name)
 
     def check_active(self):
-        year_ago = datetime.now() - timedelta(years=1)
+        year_ago = datetime.now() - timedelta(days=365)
         since_last = datetime.now() - self.last_login
         if since_last > year_ago:
             self.is_active = False
@@ -48,15 +48,39 @@ class MFUser(AbstractUser):
         education = Education.objects.filter(member=self.id)
         return education
 
+    def get_interests(self):
+        interests = MemberField.objects.filter(member=self)
+        interest_fields = [Field.objects.get(id=row.field.id)
+                           for row in interests]
+        return interest_fields
+
+    def get_mentorships(self):
+        pass
+
+    def get_mentorship_requests(self):
+        pass
+
+    def check_messages(self):
+        pass
+
+    def get_messages(self):
+        pass
+
     def create_profile(self):
         member_endorsers = self.endorsed_by()
         members_endorsed = self.has_endorsed()
         education = self.get_education()
+        interests = self.get_interests()
+        status = self.is_active
         return {'member': self,
                 'member_endorsers': member_endorsers,
                 'members_endorsed': members_endorsed,
                 'education': education,
+                'interests': interests,
+                'intro': self.intro,
+                'status': status,
                 }
+
 
 class Education(models.Model):
     choices = (('HS', 'High School'),
@@ -121,9 +145,8 @@ class MemberField(models.Model):
     class Meta:
         ordering = ['-date_entered']
 
-
-
-
+    def __unicode__(self):
+        return "{0}: {1}".format(self.member, self.field)
 
 
 
