@@ -10,6 +10,21 @@
 <div class="span12">
     <div class="span6">
         <ul>
+            {% if msg_count > 0 %}
+            <li>
+                <h4>
+                    <a href="{% url 'mfmessage_list' %}" class="text-error">
+                        You have {{ msg_count }} unread messages.   Read Messages
+                    </a>
+                </h4>
+            </li>
+            {% else %}
+            <li>
+                <a href="{% url 'mfmessage_list' %}">
+                    You have no unread messages.   Message list.
+                </a>
+            </li>
+            {% endif %}
             <li>Username: {{ member.username }}</li>
             <li>Email: {{ member.email }}</li>
             <li>Member since: {{ member.date_joined }}</li>
@@ -53,6 +68,32 @@
                     <li>
                         <a href="{% url 'member_detail' person.id %}">
                             {{ person }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            <li>Your Mentorships:</li>
+                <ul>
+                    {% for m in mentorships_list %}
+                    <li>{{ m }}</li>
+                    {% endfor %}
+                </ul>
+            <li>Mentorships you are requesting:</li>
+                <ul>
+                    {% for mr in mr_reqeusting %}
+                    <li>
+                        {{ mr }}
+                        <a href="#"></a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            <li>Mentorships requested of you:
+                <ul>
+                    {% for mr in mr_requested %}
+                    <li>
+                        {{ mr }}
+                        <a href="{% url 'accept_mentorship' mr.id %}" style="padding-left: 2em">
+                            Accept Mentoree
                         </a>
                     </li>
                     {% endfor %}

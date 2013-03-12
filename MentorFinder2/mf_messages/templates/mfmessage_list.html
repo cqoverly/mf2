@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}{% endblock %}
+{% block body %}
+    <ul>
+        {% for message in member_msgs %}
+        <li>
+            <a href="{% url 'mfmessage_detail' message.id %}"
+            {% if message.read != True %} class="text-success"
+            {% else %} class="text-error" {% endif %}>
+                {{ message }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

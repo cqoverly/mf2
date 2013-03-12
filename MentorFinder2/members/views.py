@@ -4,18 +4,17 @@ from django.views.generic import ListView
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
+from django.contrib import messages
 
 from .models import MFUser, MemberField
 from .forms import JoinForm, AddFieldForm, IntroForm
 from fields.models import Field
+from mf_messages.models import MFMessage
 
 
 def home(request):
-    message = request.session.get('message')
-    text_class = request.session.get('text_class')
-    if not message:
-        message = ''
-    return render(request, 'home.html', {'message': message, 'class': text_class})
+
+    return render(request, 'home.html')
 
 
 class ViewMembers(ListView):
@@ -59,8 +58,10 @@ def join(request):
             member.save()
             user = authenticate(username=username, password=password)
             login(request, user)
-            request.session['message'] = 'Welcome, {0}!'.format(member)
-            request.session['text_class'] = 'text-info'
+            messages.add_message(request,
+                                 messages.SUCCESS,
+                                 'Welcome, {0}'.format(request.user)
+                                 )
         return redirect('member_profile', pk=member.id)
     else:
         form = JoinForm()
@@ -82,6 +83,8 @@ def member_profile(request, pk):
     """
     member_user = MFUser.objects.get(pk=pk)
     profile = member_user.create_profile()
+    member_msgs = MFMessage.objects.filter(recipient=member_user, read=False)
+    msg_count = member_msgs.count()
 
     if request.method == 'POST':
         intro_form = IntroForm(request.POST)
@@ -90,19 +93,14 @@ def member_profile(request, pk):
                 intro_entry = intro_form.cleaned_data['intro_entry']
                 member_user.intro = intro_entry
                 member_user.save()
+                messages.add_message(request,
+                                     messages.SUCCESS,
+                                     'Your new member intro has been saved')
                 return redirect('member_profile', request.user.id)
     intro_form = IntroForm(initial={'intro_entry': profile.get('intro')})
-    return render(request,
-                  'member_profile.html',
-                  {'member': member_user,
-                   'endorsed_by': profile.get('member_endorsers'),
-                   'endorsed': profile.get('members_endorsed'),
-                   'education': profile.get('education'),
-                   'interests': profile.get('interests'),
-                   'intro_form': intro_form,
-                   'status': profile.get('status'),
-                   }
-                  )
+    profile['intro_form'] = intro_form
+    profile['msg_count'] = msg_count
+    return render(request, 'member_profile.html', profile)
 
 @login_required
 def member_detail(request, pk):

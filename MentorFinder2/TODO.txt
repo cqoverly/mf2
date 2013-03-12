@@ -27,7 +27,7 @@ TODO.txt
 
 8:  Create a filter mechanism for view_members.
 
-9:  Add message notification to profile page
+9:  <COMPLETED>Add message notification to profile page
         (And to control bar?)
 
 10  Need a way to accept mentorship requests

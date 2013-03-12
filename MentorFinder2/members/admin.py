@@ -6,7 +6,7 @@ from django.contrib.auth.admin import UserAdmin
 
 
 class MemberFieldAdmin(admin.ModelAdmin):
-    list_display = ['member', 'field']
+    list_display = ['member', 'field', 'can_mentor']
     ordering = ['member']
 
 

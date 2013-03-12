@@ -17,6 +17,9 @@ class Mentorship(models.Model):
         verbose_name = 'Mentorship'
         verbose_name_plural = 'Mentorships'
 
+    def __unicode__(self):
+        return "Mentoree: {0} -- Mentor: {1}".format(self.mentoree, self.mentor)
+
 
 class MentorshipRequest(models.Model):
     requesting_member = models.ForeignKey(MFUser, related_name='requests')
@@ -27,6 +30,11 @@ class MentorshipRequest(models.Model):
 
     class Meta:
         ordering = ['requesting_member', '-request_date']
+
+    def __unicode__(self):
+        mentoree = self.requesting_member
+        mentor = self.requested_mentor
+        return "{0} is requesting a mentorship from {1}.".format(mentoree, mentor)
 
     def save(self, *args, **kwargs):
         if not self.id:  # is a new instance.
@@ -46,17 +54,15 @@ class MentorshipRequest(models.Model):
             sent_request.save()
         super(MentorshipRequest, self).save(*args, **kwargs)
 
-
     def accept_request(self):
         # create and save Mentorship instance
-        mentoree = self.requesting_member
-        mentor = self.requested_mentor
-        date_started = timezone.now()
-        mentorship = Mentorship(mentoree=mentoree,
-                                mentor=mentor,
-                                date_started=date_started,
-                                )
+        params = {'mentoree': self.requesting_member,
+                  'mentor': self.requested_mentor,
+                  'date_started': timezone.now(),
+                  }
+        mentorship = Mentorship(**params)
         mentorship.save()
+        # update mentorship request with accepted date
         self.accepted_date = timezone.now()
         # send message back to
         msg = """
@@ -67,19 +73,15 @@ Contact your mentor to exchange contact information.
 Sicnerely,
 
 The MentorFinder Team
-"""
+""".format(self.requested_mentor)
+
         params = {'subject': "Your mentorship request has been accepted!",
                   'content': msg,
-                  'sender': mentor,
-                  'recipient': mentoree,
+                  'sender': self.requested_mentor,
+                  'recipient': self.requesting_member,
                   'date_sent': timezone.now()
                   }
         message = MFMessage(**params)
         message.save()
-
-
-
-
-
-
+        self.delete()
 

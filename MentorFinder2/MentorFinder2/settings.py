@@ -128,6 +128,8 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'members',
     'fields',
+    'mentorships',
+    'mf_messages',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -160,6 +162,8 @@ LOGGING = {
 }
 
 
-LOGIN_URL = 'login/'
+LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = '/'
+
+
 

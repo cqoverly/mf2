@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}{{ mfmessage.id }}{% endblock %}
+{% block body %}
+<p>TO:   {{ mfmessage.recipient }}</p>
+<p>FROM: {{ mfmessage.sender }}</p>
+<p>Subject:  {{ mfmessage.subject }}</p>
+<p>Date Sent:  {{ mfmessage.date_sent }}</p><br>
+<div class="span6">
+    <p>{{ mfmessage.content }}</p>
+</div>
+
+{% endblock %}

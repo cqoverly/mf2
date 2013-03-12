@@ -1,6 +1,7 @@
 from django.utils import timezone
 from django.contrib import messages
 from django.shortcuts import render, redirect
+from django.views.generic import ListView
 
 from .models import MFMessage
 from .forms import MFMessageForm
@@ -40,6 +41,28 @@ def new_message(request, member_id):
                   {'form': form,
                    'recipient': recipient
                    },
+                  )
+
+
+class MFMessage_list(ListView):
+
+    model = MFMessage
+    fields = ('recipient', 'sender', 'date_sent')
+    context_object_name = 'member_msgs'
+    template_name = 'mfmessage_list.html'
+
+    def get_queryset(self):
+        member = self.request.user
+        return MFMessage.objects.filter(recipient=member)
+
+
+def mfmessage_detail(request, msg_id):
+    mfmessage = MFMessage.objects.get(pk=msg_id)
+    mfmessage.read = True
+    mfmessage.save()
+    return render(request,
+                  'msg_detail.html',
+                  {'mfmessage': mfmessage}
                   )
 
 

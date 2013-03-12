@@ -19,7 +19,7 @@ class JoinForm(forms.ModelForm):
 class AddFieldForm(forms.Form):
 
     name = forms.ModelChoiceField(queryset=Field.objects.all())
-    mentor = forms.ChoiceField(choices=((None, 'No'), (True, 'Yes')))
+    mentor = forms.ChoiceField(choices=((False, 'No'), (True, 'Yes')))
 
     def __init__(self, *args, **kwargs):
         member = kwargs.pop('user')

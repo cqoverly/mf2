@@ -1,9 +1,12 @@
 from datetime import datetime, timedelta
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.utils import timezone
+# from django.utils import timezone
 
 from fields.models import Field
+# from mentorships.models import MentorshipRequest, Mentorship
+# from mf_messages.models import MFMessage
+import mentorships.models
 
 
 class MFUser(AbstractUser):
@@ -55,16 +58,21 @@ class MFUser(AbstractUser):
         return interest_fields
 
     def get_mentorships(self):
-        pass
+        mentorships_list = mentorships.models.Mentorship.objects.filter(mentoree=self)
+        return mentorships_list
 
     def get_mentorship_requests(self):
-        pass
+        requested = mentorships.models.MentorshipRequest.objects.filter(requesting_member=self,
+                                                                        )
+        requesting = mentorships.models.MentorshipRequest.objects.filter(requested_mentor=self,
+                                                                         )
+        return (requesting, requested)
 
-    def check_messages(self):
-        pass
+    # def check_messages(self):
+    #     pass
 
-    def get_messages(self):
-        pass
+    # def get_messages(self):
+    #     pass
 
     def create_profile(self):
         member_endorsers = self.endorsed_by()
@@ -72,13 +80,18 @@ class MFUser(AbstractUser):
         education = self.get_education()
         interests = self.get_interests()
         status = self.is_active
+        mr_requested, mr_requesting = self.get_mentorship_requests()
+        mentorships_list = self.get_mentorships()
         return {'member': self,
-                'member_endorsers': member_endorsers,
-                'members_endorsed': members_endorsed,
+                'endorsed_by': member_endorsers,
+                'endorsed': members_endorsed,
                 'education': education,
                 'interests': interests,
                 'intro': self.intro,
                 'status': status,
+                'mr_requested': mr_requested,
+                'mr_requesting': mr_requesting,
+                'mentorships_list': mentorships_list,
                 }
 
 
@@ -147,6 +160,4 @@ class MemberField(models.Model):
 
     def __unicode__(self):
         return "{0}: {1}".format(self.member, self.field)
-
-
 
