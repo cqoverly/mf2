@@ -22,6 +22,11 @@ class Mentorship(models.Model):
 
 
 class MentorshipRequest(models.Model):
+    """
+     Interim model between MFUser and Mentorship
+     Instance is created, then waits to be 'accepted' at which point
+     an instance of Mentorship is created and the request is updated.
+     """
     requesting_member = models.ForeignKey(MFUser, related_name='requests')
     requested_mentor = models.ForeignKey(MFUser, related_name='is_requested')
     request_message = models.TextField(max_length=1000)

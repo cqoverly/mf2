@@ -45,6 +45,18 @@
                     {% endfor %}
                 </ul>
                 <br>
+            <li>
+                Job Experience: 
+                <a href="{% url 'new_job' %}"style="padding-left: 2em">
+                    Add a job
+                </a>
+            </li>
+            
+                <ul>
+                    {% for job in job_list %}
+                    <li>{{ job }}</li>
+                    {% endfor %}
+                </ul>   
             <li>Education:</li>
                 <ul>
                     {% for e in education %}

@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     url(r'^view_members/$', views.ViewMembers.as_view(), name='view_members'),
     url(r'^member_detail/(?P<pk>\d+)/$', views.member_detail, name='member_detail'),
     url(r'^delete_field/(?P<field_pk>\d+)/$', views.delete_field, name='delete_field'),
+    url(r'^new_job/$', views.new_job, name='new_job')
 
 
 )

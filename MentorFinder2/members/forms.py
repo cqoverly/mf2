@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import MFUser, MemberField
+from .models import MFUser, MemberField, JobExperience
 from fields.models import Field
 
 
@@ -43,3 +43,12 @@ class AddFieldForm(forms.Form):
 class IntroForm(forms.Form):
     widget = forms.widgets.Textarea(attrs={'class': 'span6'})
     intro_entry = forms.CharField(max_length=6000, widget=widget)
+
+
+class AddJobForm(forms.ModelForm):
+
+    class Meta:
+        model = JobExperience
+        fields = ('company', 'start_date', 'end_date', 'job_summary')
+
+

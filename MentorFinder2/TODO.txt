@@ -31,3 +31,19 @@ TODO.txt
         (And to control bar?)
 
 10  Need a way to accept mentorship requests
+
+11  Check to make sure users are not duplicating on join.
+
+12  On join.form and view, check to make sure username is not already used.
+
+13  View fields and their descriptions.
+
+14  Links to allow setting education.
+
+15  Need to view all member fields in member_detail view, like endorsements of the person, their education, and their job experience.
+
+16  Change the fields/add form to send correct message instead of debug message
+
+17  How to check for null in accepted_date of MentorshipRequest? Need to check to know what to display on profile page.
+
+18  Add 'add_job' method in members.Education

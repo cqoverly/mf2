@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
 
-from .models import MFUser, MemberField
+from .models import MFUser, MemberField, JobExperience
 from .forms import JoinForm, AddFieldForm, IntroForm
 from fields.models import Field
 from mf_messages.models import MFMessage
@@ -137,13 +137,13 @@ def add_field(request):
         elif request.POST.get('add') == '':
             if form.is_valid():
                 field_name = form.cleaned_data['name']
-                mentor = form.cleaned_data['mentor']
+                mentor = form.cleaned_data['mentor'] == u'True'
                 new_field = MemberField(field=field_name,
                                         member=member,
                                         can_mentor=mentor,
                                         date_entered=datetime.now().date())
                 new_field.save()
-                message = "{0} has been added to you profile.".format(mentor)
+                message = "{0} has been added to you profile.".format(type(mentor))
             else:
                 message = "Invalid form."
     form = AddFieldForm(user=request.user)
@@ -156,5 +156,23 @@ def delete_field(request, field_pk):
         member_field = MemberField.objects.get(field=field, member=request.user)
         member_field.delete()
         return redirect('member_profile', pk=request.user.id)
+
+def new_job(request):
+    if request.method == 'POST':
+        form = AddJobForm(request.POST)
+        if request.POST.get('canel') == '':
+            return redirect ('profile', request.user.id)
+        else:
+            params = {'member': request.user,
+                      'company': form.cleaned_data['compay'],
+                      'start_date': forrm.cleaned_data['start_date'],
+                      'end_date': form.cleaned_data['end_date'],
+                      'job_summary': form.cleaned_data['job_summary']
+                      }
+            new_job = JobExperience.add_job(params)
+            return redirect('profile', request.user.id)
+
+    form = AddJobForm()
+    return render('new_job', {'form': form})
 
 
